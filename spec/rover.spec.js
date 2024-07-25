@@ -23,9 +23,7 @@ describe("Rover class", function() {
     let message = new Message('Test message with two commands');
     let rover = new Rover(100000);
     let response = rover.receiveMessage(message);
-    expect(response.message).toEqual(message.name);  
-    
-    
+    expect(response.message).toEqual(message.name);     
   });
 
 
@@ -36,44 +34,27 @@ describe("Rover class", function() {
   test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
     let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')];
     let message = new Message('Test message with two commands', commands);
-
-    console.log(message.name);
-
     let rover = new Rover(100000)  
-    rover.receiveMessage(message.commands);
-    expect(rover.receiveMessage(commands)).toEqual();
+    let response = rover.receiveMessage(message);
+    expect(response.results).toEqual(message.commands);
+    
+ });
 
 
+//  For the STATUS_CHECK command, receiveMessage(message).results includes a roverStatus object describing the current state of the rover object — mode, generatorWatts, and position. The test should check each of these for accuracy.
 
+//It might be passing, but it should not be passing. It is only passing because it says the same thing as above...
 
-
-
-
-    // let commands = new Command('How low can you go?', 'Drop it low');
-    // let message = new Message("Let's check out your moves", commands);
-    // let rover = new Rover(100000, 'Down low', 4500);
-    // let response = rover.receiveMessage(message);
-    // expect(response.results).toEqual([{},{}]);
-		
-
-
-
-
-
-
-
-    // // expect(rover.receiveMessage(commands.commandType)).toEqual([{'MODE_CHANGE' : 'LOW_POWER'}, {'STATUS_CHECK' : null}]);
-    // expect(rover.receiveMessage(response.results)).toEqual([{completed: true}, {completed: true, 
-    //   roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 }}]);
+  //TEST 10:
+  test("responds correctly to the status check command", function () {
+    let commands = [new Command('STATUS_CHECK')];
+    let message = new Message('Test message with two commands', commands);
+    let rover = new Rover(100000)  
+    let response = rover.receiveMessage(message);
+    expect(response.results).toEqual(message.commands);
+   
 
   });
-
-
-  // //TEST 10:
-  // test("responds correctly to the status check command", function () {
-  //   expect().toEqual();
-
-  // });
 
 
   // //TEST 11:
@@ -81,7 +62,7 @@ describe("Rover class", function() {
 
   // });
 
-
+                //:::Make sure that you test the rover on low-power mode::://
   // //TEST 12:
   // test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
 

@@ -11,16 +11,19 @@ describe("Message class", function() {
         expect( function() { new Message();}).toThrow(new Error('Name of message is required.'));
     });
 
-    let message = new Message('Test message with two commands', ['MODE_CHANGE', 'STATUS_CHECK']);
+    
 
     //TEST 5:    
     test("Constructor sets name", function () {
-        expect(message.name).toEqual('Test message with two commands');
+       let message = new Message('Test message with two commands', ['MODE_CHANGE', 'STATUS_CHECK']);
+       expect(message.name).toEqual('Test message with two commands');
+       
     });
 
 
     //TEST 6:
     test("contains a commands array passed into the constructor as the 2nd argument", function () {
+        let message = new Message('Test message with two commands', ['MODE_CHANGE', 'STATUS_CHECK']);
         expect(message.commands).toEqual(['MODE_CHANGE', 'STATUS_CHECK']);
     });
 });

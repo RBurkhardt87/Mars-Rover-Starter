@@ -13,6 +13,7 @@ class Rover {
     receiveMessage(message) {
       let statusCheckArray = [];
       let statusCheckObject = {};
+      let modeCheckObject = {};
       let stats = {};
 
       //CHECK FOR:  STATUS CHECK
@@ -32,63 +33,63 @@ class Rover {
          //CHECK FOR MODE VALUES: NORMAL and LOW POWER
 
 
-         for (let i = 0; i < message.commands.length; i++){
-            if (message.commands[i].value === 'NORMAL'){
-               statusCheckObject = {
+         else if (message.commands[i].commandType === 'MODE_CHANGE'){
+               if (message.commands[i].value === 'NORMAL'){
+               modeCheckObject = {
                complete : true 
-            } 
-            statusCheckArray.push(statusCheckObject);
+               } 
+               statusCheckArray.push(modeCheckObject);
 
          }
 
 
-            if (message.commands[i].value === 'LOW_POWER') {
-               statusCheckObject = {
+         else if (message.commands[i].value === 'LOW_POWER') {
+               modeCheckObject = {
                complete : false
                };
-               statusCheckArray.push(statusCheckObject);
+               statusCheckArray.push(modeCheckObject);  
+
             }
-              
             
+         else {
+            let status = {
+               message : message.name,
+               results : message.commands                          
+                                                                
+               }
+                                                                                                                 
+            return status;
+
          }   
-               
+      }
+   }                
          
                stats = {
                   message : message.name,
                   results : statusCheckArray
                }
                return stats;
-            };
-
-         
-         
-
-         
-      
-         //CHECK FOR BASIC COMMAND RETURNS UNTIL ALL CONDITIONS ARE WRITTEN   
-         stats = {
-         message : message.name,
-         results : message.commands                          
-                                                          
-         }
-                                                                                                               
-      return stats;
             }
       
+            
+         
 
 };
 
 
 
 
-// let commands = [new Command('not status check')];
-let commands = [new Command('STATUS_CHECK')];
-// let commands = [new Command('MODE_CHANGE', 'NORMAL')]
-// let commands = [new Command('MODE_CHANGE', 'LOW_POWER')]
-let message = new Message('Test message with two commands', commands);
-let rover = new Rover(100000)  
-let response = rover.receiveMessage(message);
-console.log(response.results);
+// let commands = [new Command('STATUS_CHECK'), new Command('MODE_CHANGE', 'NORMAL')];
+// let message = new Message('Test message with two commands', commands);
+// let rover = new Rover(100000)  
+// let response = rover.receiveMessage(message);
+
+//checking if low power still allows the rover to move. If feel like I might need to write a conditional where if it is move command && low power, do not move...
+
+let commands = [new Command('MOVE')]
+
+
+
 // console.log(commands[0].value);           //<----------That's the VALUE that we need to check for LOW_POWER MODE!!!!!!!!!!!!
 // console.log('this is receiveMessage results', response.results);
 // console.log("\n\n");

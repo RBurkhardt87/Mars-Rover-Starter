@@ -17,35 +17,35 @@ describe("Rover class", function() {
     expect(rover.generatorWatts).toEqual(110);
   });
 
+
+
   
-  //TEST 8:
+  //TEST 8: TODO: It is getting caught up on my for loop (line 21: for (let i = 0; i < message.commands.length; i++) { ) saying: "TypeError: Cannot read properties of undefined (reading 'length')"
   test("response returned by receiveMessage contains the name of the message", function () {
     let message = new Message('Test message with two commands');
     let rover = new Rover(100000);
     let response = rover.receiveMessage(message);
     expect(response.message).toEqual(message.name);     
+    
   });
 
 
 
 
-
-  //TEST 9:
+  //TEST 9:  
   test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
-    let commands = [new Command('Dance Off', 'The Robot'), new Command('Break it down')];
+    let commands = [new Command('STATUS_CHECK'), new Command('MODE_CHANGE', 'NORMAL')];
     let message = new Message('Test message with two commands', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.results).toEqual(message.commands);
+    expect(response.results[0].roverStatus.mode).toEqual('NORMAL');
+    expect(response.results[1].complete).toEqual(true);
+   
+    
     
  });
 
 
-//  For the STATUS_CHECK command, receiveMessage(message).results includes a roverStatus object describing the current state of the rover object — mode, generatorWatts, and position. The test should check each of these for accuracy.
-
-//message.commands =  [ Command { commandType: 'STATUS_CHECK', value: undefined } ]
-//message.commands.commandType = undefined (BECAUSE THERE IS NO VALUE TO THE COMMAND????)
-//response.results =  [ Command { commandType: 'STATUS_CHECK', value: undefined } ]
   //TEST 10:
   test("responds correctly to the status check command", function () {
     let commands = [new Command('STATUS_CHECK')];
@@ -56,13 +56,9 @@ describe("Rover class", function() {
     expect(response.results[0].roverStatus.mode).toEqual("NORMAL");
 
     //This would work right? It test that the results are what they should be
-    
-   
 
   });
 
-//   The test should check the completed property and rover mode for accuracy.
-// The rover has two modes that can be passed as values to a mode change command: ‘LOW_POWER’ and ‘NORMAL’.
 
   //TEST 11:
   test("responds correctly to the mode change command", function () {

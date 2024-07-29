@@ -20,9 +20,10 @@ describe("Rover class", function() {
 
 
   
-  //TEST 8: TODO: It is getting caught up on my for loop (line 21: for (let i = 0; i < message.commands.length; i++) { ) saying: "TypeError: Cannot read properties of undefined (reading 'length')"
+  //TEST 8: 
   test("response returned by receiveMessage contains the name of the message", function () {
-    let message = new Message('Test message with two commands');
+    let commands = [new Command('STATUS_CHECK'), new Command('MODE_CHANGE', 'NORMAL')];
+    let message = new Message('Test message with two commands', commands);
     let rover = new Rover(100000);
     let response = rover.receiveMessage(message);
     expect(response.message).toEqual(message.name);     
@@ -73,6 +74,8 @@ describe("Rover class", function() {
 
 
                 //:::Make sure that you test the rover on low-power mode::://
+                //THINK I ONLY HAVE IT SET FOR CHECKING THE COMMAND VALUES, BUT I STILL NEED TO MAKE SURE THAT IF LOW POWER MODE IS FOUND IT WONT MOVE THE ROVER
+                //TEST IS PASSING, BUT IT IS NOT COMPLETE YET.
   // //TEST 12:
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
     let commands = [new Command('MODE_CHANGE', 'LOW_POWER')];

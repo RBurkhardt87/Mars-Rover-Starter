@@ -78,17 +78,20 @@ describe("Rover class", function() {
 
   //TEST 13:
   test("responds with the position for the move command", function () {
-    let commands = [new Command('MODE_CHANGE', 'NORMAL'), new Command('MOVE', 200000)];
+    let commands = [new Command('STATUS_CHECK'), new Command('MOVE', 200000)];
     let message = new Message('Checking for mode change', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.position).toEqual(200000);
+    expect(response.results[0].roverStatus.position).toEqual(200000); 
+    //there's not actually a position given back in response, unless I do status check. And rover should move if default is "Normal" mode. Shouldn't need the command.
     expect(response.results[1].complete).toEqual(true);
   });
 
 
 
-});
+  });
+
+
 
 
 

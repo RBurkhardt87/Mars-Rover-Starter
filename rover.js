@@ -29,22 +29,49 @@ class Rover {
                                                             
        
          } 
-
-
-        
-
-         else if (message.commands[i].commandType === ('MOVE')){
-                  moveCheckObject = {
-                  complete: true
-               };
-               statusCheckArray.push(moveCheckObject);
-               //trying to get the rover position to update
-               rover.position = message.commands[i].value;
-               console.log(rover.position);
-
+               //do I need to write an object result that says false if mode is in low? Or just make sure rover doesn't move?
+  
+            //    else if (message.commands[i].commandType === 'MOVE') {
+            //       if (rover.mode === 'NORMAL'){
+            //       rover.position = message.commands[i].value;
+            //       moveCheckObject = {
+            //          complete: true
+            //       };
+            //       statusCheckArray.push(moveCheckObject);
+            //    }
+            // }
             
-         }
 
+            //do I need to make a nested loop for the values maybe?? If the commands were put in the opposite way, I would think code would break
+               else if (message.commands[i].commandType === ('MOVE') && ('MODE_CHANGE')){
+                  if (message.commands[1].value === 'LOW_POWER'){
+                  moveCheckObject = {
+                     complete: false
+                  };
+                
+                  statusCheckArray.push(moveCheckObject);
+                  
+               }
+         
+      
+               else if (message.commands[i].commandType === ('MOVE') && ('MODE_CHANGE')){
+                  if (message.commands[1].value === 'NORMAL'){
+                     rover.position = message.commands[i].value; 
+                     
+                     moveCheckObject = {
+                        complete: true
+                     };
+                  
+                     
+                     statusCheckArray.push(moveCheckObject);
+                     
+                     
+                  } 
+   
+               } 
+               
+              
+            }
              //CHECK FOR MODE VALUES: NORMAL and LOW POWER
 
          else if (message.commands[i].commandType === 'MODE_CHANGE'){
@@ -64,9 +91,7 @@ class Rover {
                statusCheckArray.push(modeCheckObject);  
 
             }
-
-              
-
+  
 
             
          else {
@@ -89,7 +114,7 @@ class Rover {
                return stats;
             }
       
-            
+         
          
          
 };
@@ -104,14 +129,45 @@ class Rover {
 
 //checking if low power still allows the rover to move. If feel like I might need to write a conditional where if it is move command && low power, do not move...
 
-let commands = [new Command('MOVE', 200000), new Command('MODE_CHANGE', 'LOW_POWER')];
+// let commands = [new Command('MOVE', 200000)];
+let commands = [new Command('MOVE', 250000), new Command('MODE_CHANGE', 'NORMAL')];
+// let commands = [new Command('MOVE', 300000), new Command('MODE_CHANGE', 'LOW_POWER')];
 let message = new Message('Test message with two commands', commands);
 let rover = new Rover(100000)  
 let response = rover.receiveMessage(message);
-// console.log(message.commands.commandType[1].value);
 console.log(response);
 console.log(rover.position);
-// console.log(response.results[1].roverStatus.position);
+
+
+/* 
+Current results when running the program:
+
+--->let commands = [new Command('MOVE', 200000)];   :
+
+{
+  message: 'Test message with two commands',
+  results: [ { complete: true } ]
+}
+200000
+
+---> let commands = [new Command('MOVE', 250000), new Command('MODE_CHANGE', 'NORMAL')];   :
+
+{
+  message: 'Test message with two commands',
+  results: [ { complete: true }, { complete: true } ]
+}
+250000
+
+---> let commands = [new Command('MOVE', 300000), new Command('MODE_CHANGE', 'LOW_POWER')];   :
+                                                                                                            <---- I had it working before I put the extra MOVE in
+{
+  message: 'Test message with two commands',
+  results: [ { complete: true }, { complete: false } ]
+}
+300000
+
+*/
+
 
 
 

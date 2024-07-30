@@ -17,8 +17,6 @@ describe("Rover class", function() {
     expect(rover.generatorWatts).toEqual(110);
   });
 
-
-
   
   //TEST 8: 
   test("response returned by receiveMessage contains the name of the message", function () {
@@ -31,8 +29,6 @@ describe("Rover class", function() {
   });
 
 
-
-
   //TEST 9:  
   test("response returned by receiveMessage includes two results if two commands are sent in the message", function () {
     let commands = [new Command('STATUS_CHECK'), new Command('MODE_CHANGE', 'NORMAL')];
@@ -41,8 +37,7 @@ describe("Rover class", function() {
     let response = rover.receiveMessage(message);
     expect(response.results[0].roverStatus.mode).toEqual('NORMAL');
     expect(response.results[1].complete).toEqual(true);
-   
-    
+       
     
  });
 
@@ -56,7 +51,6 @@ describe("Rover class", function() {
     expect(response.results[0].complete).toEqual(true);
     expect(response.results[0].roverStatus.mode).toEqual("NORMAL");
 
-    //This would work right? It test that the results are what they should be
 
   });
 
@@ -72,13 +66,9 @@ describe("Rover class", function() {
   });
 
 
-
-                //:::Make sure that you test the rover on low-power mode::://
-                //THINK I ONLY HAVE IT SET FOR CHECKING THE COMMAND VALUES, BUT I STILL NEED TO MAKE SURE THAT IF LOW POWER MODE IS FOUND IT WONT MOVE THE ROVER
-                //TEST IS PASSING, BUT IT IS NOT COMPLETE YET.
   // //TEST 12:
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
-    let commands = [new Command('MODE_CHANGE', 'LOW_POWER')];
+    let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE', 200000)];
     let message = new Message('Checking for mode change', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
@@ -86,10 +76,17 @@ describe("Rover class", function() {
   });
 
 
-  // //TEST 13:
-  // test("responds with the position for the move command", function () {
+  //TEST 13:
+  test("responds with the position for the move command", function () {
+    let commands = [new Command('MODE_CHANGE', 'NORMAL'), new Command('MOVE', 200000)];
+    let message = new Message('Checking for mode change', commands);
+    let rover = new Rover(100000)  
+    let response = rover.receiveMessage(message);
+    expect(response.rover.position).toEqual(200000);
+    expect(response.results[1].complete).toEqual(true);
+  });
 
-  // });
+
 
 });
 

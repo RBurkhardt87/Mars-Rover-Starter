@@ -14,6 +14,7 @@ class Rover {
       let statusCheckArray = [];
       let statusCheckObject = {};
       let modeCheckObject = {};
+      let moveCheckObject = {};
       let stats = {};
 
       //CHECK FOR:  STATUS CHECK
@@ -32,7 +33,19 @@ class Rover {
 
          //CHECK FOR MODE VALUES: NORMAL and LOW POWER
 
+         else if (message.commands[i].commandType === ('MODE_CHANGE', "NORMAL") && ('MOVE', value)){
+            // if (message.commands.value === 'NORMAL'){
+               moveCheckObject = {
+                  complete: true
+               };
+               statusCheckArray.push(moveCheckObject);
+               //trying to get the rover position to update
+               this.position = new Command('MOVE', value);
+               console.log(rover.position);
 
+            
+         }
+            
          else if (message.commands[i].commandType === 'MODE_CHANGE'){
                if (message.commands[i].value === 'NORMAL'){
                modeCheckObject = {
@@ -40,8 +53,8 @@ class Rover {
                } 
                statusCheckArray.push(modeCheckObject);
 
-         }
-
+            }
+         
 
          else if (message.commands[i].value === 'LOW_POWER') {
                modeCheckObject = {
@@ -50,6 +63,10 @@ class Rover {
                statusCheckArray.push(modeCheckObject);  
 
             }
+
+              
+
+
             
          else {
             let status = {
@@ -73,7 +90,7 @@ class Rover {
       
             
          
-
+         
 };
 
 
@@ -86,7 +103,14 @@ class Rover {
 
 //checking if low power still allows the rover to move. If feel like I might need to write a conditional where if it is move command && low power, do not move...
 
-let commands = [new Command('MOVE')]
+let commands = [new Command('MODE_CHANGE', 'NORMAL'), new Command('MOVE', 200000)];
+let message = new Message('Test message with two commands', commands);
+let rover = new Rover(100000)  
+let response = rover.receiveMessage(message);
+// console.log(message.commands.commandType[1].value);
+console.log(response);
+console.log(response.results[1].roverStatus.position);
+
 
 
 

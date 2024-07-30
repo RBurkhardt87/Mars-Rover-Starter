@@ -31,21 +31,22 @@ class Rover {
          } 
 
 
-         //CHECK FOR MODE VALUES: NORMAL and LOW POWER
+        
 
-         else if (message.commands[i].commandType === ('MODE_CHANGE', "NORMAL") && ('MOVE', value)){
-            // if (message.commands.value === 'NORMAL'){
-               moveCheckObject = {
+         else if (message.commands[i].commandType === ('MOVE')){
+                  moveCheckObject = {
                   complete: true
                };
                statusCheckArray.push(moveCheckObject);
                //trying to get the rover position to update
-               this.position = new Command('MOVE', value);
+               rover.position = message.commands[i].value;
                console.log(rover.position);
 
             
          }
-            
+
+             //CHECK FOR MODE VALUES: NORMAL and LOW POWER
+
          else if (message.commands[i].commandType === 'MODE_CHANGE'){
                if (message.commands[i].value === 'NORMAL'){
                modeCheckObject = {
@@ -103,13 +104,14 @@ class Rover {
 
 //checking if low power still allows the rover to move. If feel like I might need to write a conditional where if it is move command && low power, do not move...
 
-let commands = [new Command('MODE_CHANGE', 'NORMAL'), new Command('MOVE', 200000)];
+let commands = [new Command('MOVE', 200000), new Command('MODE_CHANGE', 'LOW_POWER')];
 let message = new Message('Test message with two commands', commands);
 let rover = new Rover(100000)  
 let response = rover.receiveMessage(message);
 // console.log(message.commands.commandType[1].value);
 console.log(response);
-console.log(response.results[1].roverStatus.position);
+console.log(rover.position);
+// console.log(response.results[1].roverStatus.position);
 
 
 

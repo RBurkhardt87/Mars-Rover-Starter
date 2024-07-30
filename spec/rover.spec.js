@@ -82,7 +82,7 @@ describe("Rover class", function() {
     let message = new Message('Checking for mode change', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.rover.position).toEqual(200000);
+    expect(response.position).toEqual(200000);
     expect(response.results[1].complete).toEqual(true);
   });
 

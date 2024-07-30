@@ -78,13 +78,13 @@ describe("Rover class", function() {
 
   //TEST 13:
   test("responds with the position for the move command", function () {
-    let commands = [new Command('STATUS_CHECK'), new Command('MOVE', 200000)];
+    let commands = [new Command('MOVE', 1234567890), new Command('MODE_CHANGE', 'NORMAL'), new Command('STATUS_CHECK')];
     let message = new Message('Checking for mode change', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.results[0].roverStatus.position).toEqual(200000); 
-    //there's not actually a position given back in response, unless I do status check. And rover should move if default is "Normal" mode. Shouldn't need the command.
-    expect(response.results[1].complete).toEqual(true);
+    expect(response.results[2].roverStatus.position).toEqual(1234567890); 
+    expect(response.results[0].complete).toEqual(true);
+    //I went and logged these in the rover.js file and I don't understand why they aren't working as a test. PLUS: I need to still figure out how I am going to have the move command work when there isn't a mode command pushed through. If my thinking is correct, mode = Normal is default. So, rover should always move unless LOW POWER has been sent through the mode change command. 
   });
 
 

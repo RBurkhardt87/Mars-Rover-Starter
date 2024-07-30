@@ -122,25 +122,21 @@ class Rover {
 
 
 
-// let commands = [new Command('STATUS_CHECK'), new Command('MODE_CHANGE', 'NORMAL')];
-// let message = new Message('Test message with two commands', commands);
-// let rover = new Rover(100000)  
-// let response = rover.receiveMessage(message);
-
-//checking if low power still allows the rover to move. If feel like I might need to write a conditional where if it is move command && low power, do not move...
 
 // let commands = [new Command('MOVE', 200000)];
-let commands = [new Command('MOVE', 250000), new Command('MODE_CHANGE', 'NORMAL')];
+// let commands = [new Command('MOVE', 250000), new Command('MODE_CHANGE', 'NORMAL')];
 // let commands = [new Command('MOVE', 300000), new Command('MODE_CHANGE', 'LOW_POWER')];
+// let commands = [new Command('MOVE', 250000), new Command('MODE_CHANGE', 'NORMAL'), new Command('STATUS_CHECK')];
+let commands = [new Command('MOVE', 250000), new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')];
 let message = new Message('Test message with two commands', commands);
 let rover = new Rover(100000)  
 let response = rover.receiveMessage(message);
 console.log(response);
-console.log(rover.position);
+console.log(response.results[2].roverStatus.position);
 
 
 /* 
-Current results when running the program:
+Current results when running the program: (When move by itself isn't commented out)
 
 --->let commands = [new Command('MOVE', 200000)];   :
 
@@ -159,7 +155,7 @@ Current results when running the program:
 250000
 
 ---> let commands = [new Command('MOVE', 300000), new Command('MODE_CHANGE', 'LOW_POWER')];   :
-                                                                                                            <---- I had it working before I put the extra MOVE in
+                                                                                                   <---- I had it working before I put the extra MOVE conditional in
 {
   message: 'Test message with two commands',
   results: [ { complete: true }, { complete: false } ]

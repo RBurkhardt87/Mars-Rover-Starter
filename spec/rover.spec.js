@@ -24,8 +24,7 @@ describe("Rover class", function() {
     let message = new Message('Test message with two commands', commands);
     let rover = new Rover(100000);
     let response = rover.receiveMessage(message);
-    expect(response.message).toEqual(message.name);     
-    
+    expect(response.message).toEqual(message.name);       
   });
 
 
@@ -36,10 +35,8 @@ describe("Rover class", function() {
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
     expect(response.results[0].roverStatus.mode).toEqual('NORMAL');
-    expect(response.results[1].complete).toEqual(true);
-       
-    
- });
+    expect(response.results[1].complete).toEqual(true);     
+  });
 
 
   //TEST 10:
@@ -50,8 +47,6 @@ describe("Rover class", function() {
     let response = rover.receiveMessage(message);
     expect(response.results[0].complete).toEqual(true);
     expect(response.results[0].roverStatus.mode).toEqual("NORMAL");
-
-
   });
 
 
@@ -59,17 +54,20 @@ describe("Rover class", function() {
   test("responds correctly to the mode change command", function () {
     let commands = [new Command('MODE_CHANGE', 'NORMAL')];
     let message = new Message('Checking for mode change', commands);
+    let command1 = [new Command('MODE_CHANGE', 'LOW_POWER')];
+    let message1 = new Message('checking for low power', command1);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
+    let response1 = rover.receiveMessage(message1);
     expect(response.results[0].complete).toEqual(true);
-    
+    expect(response1.results[0].complete).toEqual(false);    
   });
 
 
   // //TEST 12:
   test("responds with a false completed value when attempting to move in LOW_POWER mode", function () {
     let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE', 200000)];
-    let message = new Message('Checking for mode change', commands);
+    let message = new Message('Checking for mode change low power', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
     expect(response.results[0].complete).toEqual(false);
@@ -78,13 +76,20 @@ describe("Rover class", function() {
 
   //TEST 13:
   test("responds with the position for the move command", function () {
-    let commands = [new Command('MOVE', 1234567890), new Command('MODE_CHANGE', 'NORMAL'), new Command('STATUS_CHECK')];
+    let commands = [new Command('MOVE', 1234567890), new Command('MODE_CHANGE', 'NORMAL')];
     let message = new Message('Checking for mode change', commands);
+    let command1 = [new Command('MOVE', 1234567890), new Command('MODE_CHANGE', 'LOW_POWER')];
+    let message1 = new Message('Checking for mode change', command1);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.results[2].roverStatus.position).toEqual(1234567890); 
-    expect(response.results[0].complete).toEqual(true);
-    //I went and logged these in the rover.js file and I don't understand why they aren't working as a test. PLUS: I need to still figure out how I am going to have the move command work when there isn't a mode command pushed through. If my thinking is correct, mode = Normal is default. So, rover should always move unless LOW POWER has been sent through the mode change command. 
+    let response1 = rover.receiveMessage(message1);
+    expect(response.results[0].position).toEqual(1234567890); 
+    expect(response.results[1].complete).toEqual(true);
+    expect(response1.results[0].position).toEqual(100000);    //why is that not passing, when I run it I am getting 100000 for the position.
+    expect(response1.results[1].complete).toEqual(false);
+    //I went and logged these in the rover.js file and I don't understand why they aren't working as a test. PLUS: I need to still figure out how I am going to have the move command work when there isn't a mode command pushed through. If my thinking is correct, mode = Normal is default. So, rover should always move unless LOW POWER has been sent through the mode change command-- that command updates the mode when it gets passed thru as well.
+
+    //and... I probably need to check more commands for the test. Maybe check and make sure when "LOW_POWER" is passed it doesn't move.
   });
 
 
@@ -94,40 +99,3 @@ describe("Rover class", function() {
 
 
 
-
-  /*
-     
-          receiveMessage(message)
-
-    message is a Message object
-    Returns an object containing at least two properties:
-    message: the name of the original Message object
-    results: an array of results. Each element in the array is an object that corresponds to one Command in message.commands.
-    Updates certain properties of the rover object
-    Details about how to respond to different commands are in the Command Types table.
-
-
-                                {
-                                  message: 'Test message with two commands',
-                                  results: [
-                                      {
-                                        completed: true
-                                      },
-                                      {
-                                        completed: true, 
-                                        roverStatus: { mode: 'LOW_POWER', generatorWatts: 110, position: 98382 }
-                                      }
-                                  ]
-                                } 
-   
-      THINK: THE FUNCTION IS WRITTEN AS AN OBJECT WITH 2 PROPERTIES (MESSAGE AND RESULTS). MESSAGE JUST RETURNS THE MESSAGE THE WAS SENT TO THE ROVER. 
-      HOWEVER, RESULTS RETURNS AN ARRAY THAT HAS 2 OBJECTS INSIDE THAT CORRESPONDS TO THE COMMANDS THAT WERE PASSED IN. EACH OF THE OBJECTS INSIDE THE RESULTS ARRAY
-      HAVE A KEY THAT CHECKS IF IT HAS BEEN COMPLETED. 
-
-      POSSIBLY: SET "COMPLETED" TO FALSE AND UPDATE TO TRUE IF IT WAS DONE
-                STATUS CHECK SEEMS TO RETURN AN UPDATE ON PROPERTIES OF THE ROVER
-                DECLARE A RESULTS ARRAY (LET RESULTS = [];)
-                PUSH COMMANDS INTO THE ARRAY?? (RESULTS.PUSH(COMMANDS[0]);) --- BUT I NEED TO MAKE THE COMMANDS OBJECTS FIRST. 
-                OR MAYBE I NEED TO WRITE CONDITIONALS TO CHECK THE STATUS OF THE COMMANDS FOR UPDATES.
-
-  */

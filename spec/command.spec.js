@@ -24,5 +24,4 @@ describe("Command class", function() {
     let modeCommand = new Command('MODE_CHANGE', 'LOW_POWER');
     expect(modeCommand.value).toBe('LOW_POWER');
   });
-
 });

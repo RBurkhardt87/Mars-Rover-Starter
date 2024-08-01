@@ -83,15 +83,8 @@ describe("Rover class", function() {
     let response = rover.receiveMessage(message);   
     expect(response.results[0].position).toEqual(1234567890); 
     expect(response.results[0].complete).toEqual(true);
-  
-    //I went and logged these in the rover.js file and I don't understand why they aren't working as a test. PLUS: I need to still figure out how I am going to have the move command work when there isn't a mode command pushed through. If my thinking is correct, mode = Normal is default. So, rover should always move unless LOW POWER has been sent through the mode change command-- that command updates the mode when it gets passed thru as well.
-
-    //and... I probably need to check more commands for the test. Maybe check and make sure when "LOW_POWER" is passed it doesn't move.
   });
-
-
-
-  });
+});
 
 
 

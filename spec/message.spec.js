@@ -16,8 +16,7 @@ describe("Message class", function() {
     //TEST 5:    
     test("Constructor sets name", function () {
        let message = new Message('Test message with two commands', ['MODE_CHANGE', 'STATUS_CHECK']);
-       expect(message.name).toEqual('Test message with two commands');
-       
+       expect(message.name).toEqual('Test message with two commands');       
     });
 
 

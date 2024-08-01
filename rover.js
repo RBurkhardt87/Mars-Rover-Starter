@@ -10,13 +10,12 @@ class Rover {
       this.generatorWatts = 110;
    }
 
-    receiveMessage(message) {
+   receiveMessage(message) {
       let statusCheckArray = [];
       let statusCheckObject = {};
       let modeCheckObject = {};
       let moveCheckObject = {};
-   
-     
+      
 
       
       for (let i = 0; i < message.commands.length; i++) { 
@@ -37,15 +36,15 @@ class Rover {
                statusCheckArray.push(moveCheckObject);
 
             }  else {
-               this.mode = 'NORMAL';
-               this.position = message.commands[i].value;
-               moveCheckObject = {
-                  complete: true,
-                  position: this.position
-               };
-            
-               statusCheckArray.push(moveCheckObject);
-            }
+                  this.mode = 'NORMAL';
+                  this.position = message.commands[i].value;
+                  moveCheckObject = {
+                     complete: true,
+                     position: this.position
+                  };
+               
+                  statusCheckArray.push(moveCheckObject);
+               }
          }              
 
          else if (message.commands[i].commandType === 'MODE_CHANGE'){
@@ -57,23 +56,21 @@ class Rover {
                statusCheckArray.push(modeCheckObject);
 
             }  else {
-               this.mode = "LOW_POWER";
-               modeCheckObject = {
-               complete : false
-               };
-               statusCheckArray.push(modeCheckObject);  
-         }
-      }
-       
-            let stats = {
+                  this.mode = "LOW_POWER";
+                  modeCheckObject = {
+                  complete : false
+                  };
+                  statusCheckArray.push(modeCheckObject);  
+               }
+         }      
+      }          
+
+           let stats = {
                message : message.name,
                results : statusCheckArray                      
             };                                                                                                   
             return stats;
-         }          
-      
-   }       
-         
+   }            
 };
 
 

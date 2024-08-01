@@ -7,10 +7,7 @@ class Message {
         this.commands = commands;
       }
     
-    }
+};
 
-
-
-let message = new Message('Test message with two commands', ['MODE_CHANGE', 'STATUS_CHECK']);
 
 module.exports = Message;

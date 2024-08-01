@@ -45,8 +45,9 @@ describe("Rover class", function() {
     let message = new Message('Test message with two commands', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
+    let expected = {mode : 'NORMAL', generatorWatts : 110, position : 100000};
     expect(response.results[0].completed).toEqual(true);
-    expect(response.results[0].roverStatus.mode).toEqual("NORMAL");
+    expect(response.results[0].roverStatus).toEqual(expected);
   });
 
 

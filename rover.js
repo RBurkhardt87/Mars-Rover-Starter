@@ -4,7 +4,7 @@ const Command = require('./command.js');
 
 
 class Rover {
-   constructor(position, mode, generatorWatts) {
+   constructor(position) {
       this.position = position;
       this.mode = "NORMAL";
       this.generatorWatts = 110;

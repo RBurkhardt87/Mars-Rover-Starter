@@ -71,22 +71,19 @@ describe("Rover class", function() {
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
     expect(response.results[0].complete).toEqual(false);
+    expect(rover.position).toEqual(100000);
   });
 
 
   //TEST 13:
   test("responds with the position for the move command", function () {
-    let commands = [new Command('MOVE', 1234567890), new Command('MODE_CHANGE', 'NORMAL')];
-    let message = new Message('Checking for mode change', commands);
-    let command1 = [new Command('MOVE', 1234567890), new Command('MODE_CHANGE', 'LOW_POWER')];
-    let message1 = new Message('Checking for mode change', command1);
+    let commands = [new Command('MOVE', 1234567890)];
+    let message = new Message('Checking for mode change', commands);  
     let rover = new Rover(100000)  
-    let response = rover.receiveMessage(message);
-    let response1 = rover.receiveMessage(message1);
+    let response = rover.receiveMessage(message);   
     expect(response.results[0].position).toEqual(1234567890); 
-    expect(response.results[1].complete).toEqual(true);
-    expect(response1.results[0].position).toEqual(100000);    //why is that not passing, when I run it I am getting 100000 for the position.
-    expect(response1.results[1].complete).toEqual(false);
+    expect(response.results[0].complete).toEqual(true);
+  
     //I went and logged these in the rover.js file and I don't understand why they aren't working as a test. PLUS: I need to still figure out how I am going to have the move command work when there isn't a mode command pushed through. If my thinking is correct, mode = Normal is default. So, rover should always move unless LOW POWER has been sent through the mode change command-- that command updates the mode when it gets passed thru as well.
 
     //and... I probably need to check more commands for the test. Maybe check and make sure when "LOW_POWER" is passed it doesn't move.

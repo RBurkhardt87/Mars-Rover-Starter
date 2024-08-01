@@ -13,10 +13,7 @@ class Rover {
    receiveMessage(message) {
       let statusCheckArray = [];
       let statusCheckObject = {};
-      let modeCheckObject = {};
-      let moveCheckObject = {};
-      
-
+         
       
       for (let i = 0; i < message.commands.length; i++) { 
          
@@ -29,39 +26,36 @@ class Rover {
          }
 
          if (message.commands[i].commandType === 'MOVE') {
-            if (this.mode === 'LOW_POWER' || message.commands[i].value === 'LOW_POWER'){             
-               moveCheckObject = {
+            if (this.mode === 'LOW_POWER'){             
+               statusCheckObject = {
                completed: false
-               };
-               statusCheckArray.push(moveCheckObject);
-
+               };           
             }  
             
             else if (this.mode === 'NORMAL'){               
                   this.position = message.commands[i].value;
-                  moveCheckObject = {
+                  statusCheckObject = {
                   completed: true
-                  };
-               
-                  statusCheckArray.push(moveCheckObject);
-               }
+                  };                 
+            }
+            statusCheckArray.push(statusCheckObject);
          }              
 
          if (message.commands[i].commandType === 'MODE_CHANGE'){
             if (message.commands[i].value === 'NORMAL'){
                this.mode = "NORMAL";
-               modeCheckObject = {
+               statusCheckObject = {
                completed : true 
                };              
-               statusCheckArray.push(modeCheckObject);
+               
 
             }  else if (message.commands[i].value === 'LOW_POWER'){
                   this.mode = "LOW_POWER";
-                  modeCheckObject = {
+                  statusCheckObject = {
                   completed : true
-                  };
-                  statusCheckArray.push(modeCheckObject);
+                  };                  
                }  
+               statusCheckArray.push(statusCheckObject);
          }
                
       }          

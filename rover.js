@@ -22,47 +22,48 @@ class Rover {
          
          if (message.commands[i].commandType === 'STATUS_CHECK') {          
             statusCheckObject = {
-            complete : true, 
+            completed: true, 
             roverStatus : {mode : this.mode, generatorWatts : this.generatorWatts, position : this.position}
             };
             statusCheckArray.push(statusCheckObject);                                                           
          }
 
-         else if (message.commands[i].commandType === 'MOVE') {
-            if (this.mode === 'LOW_POWER'){             
+         if (message.commands[i].commandType === 'MOVE') {
+            if (this.mode === 'LOW_POWER' || message.commands[i].value === 'LOW_POWER'){             
                moveCheckObject = {
-               complete: false,
+               completed: false
                };
                statusCheckArray.push(moveCheckObject);
 
-            }  else {
-                  this.mode = 'NORMAL';
+            }  
+            
+            else if (this.mode === 'NORMAL'){               
                   this.position = message.commands[i].value;
                   moveCheckObject = {
-                     complete: true,
-                     position: this.position
+                  completed: true
                   };
                
                   statusCheckArray.push(moveCheckObject);
                }
          }              
 
-         else if (message.commands[i].commandType === 'MODE_CHANGE'){
+         if (message.commands[i].commandType === 'MODE_CHANGE'){
             if (message.commands[i].value === 'NORMAL'){
                this.mode = "NORMAL";
                modeCheckObject = {
-               complete : true 
+               completed : true 
                };              
                statusCheckArray.push(modeCheckObject);
 
-            }  else {
+            }  else if (message.commands[i].value === 'LOW_POWER'){
                   this.mode = "LOW_POWER";
                   modeCheckObject = {
-                  complete : false
+                  completed : true
                   };
-                  statusCheckArray.push(modeCheckObject);  
-               }
-         }      
+                  statusCheckArray.push(modeCheckObject);
+               }  
+         }
+               
       }          
 
            let stats = {
@@ -72,6 +73,8 @@ class Rover {
             return stats;
    }            
 };
+
+
 
 
 module.exports = Rover;

@@ -35,7 +35,7 @@ describe("Rover class", function() {
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
     expect(response.results[0].roverStatus.mode).toEqual('NORMAL');
-    expect(response.results[1].complete).toEqual(true);     
+    expect(response.results[1].completed).toEqual(true);     
   });
 
 
@@ -45,7 +45,7 @@ describe("Rover class", function() {
     let message = new Message('Test message with two commands', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.results[0].complete).toEqual(true);
+    expect(response.results[0].completed).toEqual(true);
     expect(response.results[0].roverStatus.mode).toEqual("NORMAL");
   });
 
@@ -53,14 +53,14 @@ describe("Rover class", function() {
   //TEST 11:
   test("responds correctly to the mode change command", function () {
     let commands = [new Command('MODE_CHANGE', 'NORMAL')];
-    let message = new Message('Checking for mode change', commands);
+    let message = new Message('Checking for mode change normal', commands);
     let command1 = [new Command('MODE_CHANGE', 'LOW_POWER')];
     let message1 = new Message('checking for low power', command1);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
     let response1 = rover.receiveMessage(message1);
-    expect(response.results[0].complete).toEqual(true);
-    expect(response1.results[0].complete).toEqual(false);    
+    expect(response.results[0].completed).toEqual(true);
+    expect(response1.results[0].completed).toEqual(true);    
   });
 
 
@@ -70,7 +70,7 @@ describe("Rover class", function() {
     let message = new Message('Checking for mode change low power', commands);
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);
-    expect(response.results[0].complete).toEqual(false);
+    expect(response.results[1].completed).toEqual(false);
     expect(rover.position).toEqual(100000);
   });
 
@@ -81,8 +81,8 @@ describe("Rover class", function() {
     let message = new Message('Checking for mode change', commands);  
     let rover = new Rover(100000)  
     let response = rover.receiveMessage(message);   
-    expect(response.results[0].position).toEqual(1234567890); 
-    expect(response.results[0].complete).toEqual(true);
+    expect(rover.position).toEqual(1234567890); 
+    expect(response.results[0].completed).toEqual(true);
   });
 });
 

@@ -42,19 +42,12 @@ class Rover {
          }              
 
          if (message.commands[i].commandType === 'MODE_CHANGE'){
-            if (message.commands[i].value === 'NORMAL'){
-               this.mode = "NORMAL";
+            if (message.commands[i].value === 'NORMAL' || message.commands[i].value === 'LOW_POWER'  ){
+               this.mode = message.commands[i].value;
                statusCheckObject = {
                completed : true 
-               };              
-               
-
-            }  else if (message.commands[i].value === 'LOW_POWER'){
-                  this.mode = "LOW_POWER";
-                  statusCheckObject = {
-                  completed : true
-                  };                  
-               }  
+               };      
+            }  
                statusCheckArray.push(statusCheckObject);
          }
                
